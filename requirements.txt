@@ -1,0 +1,7 @@
+pandas>=2.3
+numpy>=2.0
+matplotlib>=3.10
+scikit-learn>=1.6
+lightgbm>=4.6
+pyarrow>=19.0
+jupyter

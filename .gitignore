@@ -1,0 +1,26 @@
+# Data — baixar do Kaggle (ver README), não versionar
+data/raw/*
+data/processed/*
+data/external/*
+!data/**/.gitkeep
+
+# Outputs gerados
+outputs/forecasts/*
+outputs/metrics/*
+!outputs/**/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / SO
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
