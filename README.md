@@ -1,5 +1,6 @@
 # Retail Demand Forecasting — End to End
 
+![CI](https://github.com/lpereira19/end-to-end-demand-dpm/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.14-blue)
 ![LightGBM](https://img.shields.io/badge/model-LightGBM-green)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
@@ -26,6 +27,7 @@ For reference, top solutions of the original [Kaggle challenge](https://www.kagg
 - **Baseline first** — every model must beat a zero-parameter seasonal naive forecast before earning its complexity.
 - **Leakage-safe by construction** — time-based train/validation splits; every lag and rolling feature uses only data strictly before the target date.
 - **Horizon-aware evaluation** — beyond the usual 1-day-ahead scoring, a rolling-origin backtest reproduces the real deployment constraint: forecasting a quarter ahead with quarter-old data.
+- **Tested, reusable code** — feature engineering, metrics and training live in [`src/`](src/) modules with unit tests run on GitHub Actions, including an [anti-leakage test](tests/test_features.py) that proves no feature can see data closer than the forecast horizon.
 - **Narrated notebooks** — each notebook states its question, shows the evidence, and ends with findings that feed the next step.
 - **Honest reporting** — caveats and scope notes included (e.g., why 91-day scores stay close to 1-day scores on this dataset).
 
@@ -49,7 +51,12 @@ For reference, top solutions of the original [Kaggle challenge](https://www.kagg
 ```
 ├── data/              # raw & processed data (not versioned)
 ├── notebooks/         # numbered analysis notebooks (the pipeline)
-├── src/               # reusable modules (in progress — see roadmap)
+├── src/
+│   ├── data/          # loading
+│   ├── features/      # leakage-safe feature engineering (horizon-aware)
+│   ├── evaluation/    # metrics
+│   └── models/        # LightGBM training
+├── tests/             # unit tests (pytest), run in CI
 ├── outputs/
 │   ├── figures/       # exported charts
 │   ├── forecasts/     # model predictions (not versioned)
@@ -66,7 +73,7 @@ pip install -r requirements.txt
 
 ## Roadmap
 
-- [ ] Extract feature/metric/training logic into `src/` modules with unit tests and CI
+- [x] Extract feature/metric/training logic into `src/` modules with unit tests and CI
 - [ ] Inventory optimization: quantile forecasts → safety stock & service-level simulation
 - [ ] Holiday calendar features
 
