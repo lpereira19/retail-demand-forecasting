@@ -36,7 +36,7 @@ The data is not versioned in this repo. To reproduce, download `train.csv` from 
 | 1. Exploratory data analysis | [`notebooks/01_eda.ipynb`](notebooks/01_eda.ipynb) | ✅ done |
 | 2. Feature engineering | [`notebooks/02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb) | ✅ done |
 | 3. Baseline & ML models | [`notebooks/03_modeling.ipynb`](notebooks/03_modeling.ipynb) | ✅ done |
-| 4. Evaluation & backtesting | `notebooks/04_evaluation.ipynb` | planned |
+| 4. Evaluation & backtesting | [`notebooks/04_evaluation.ipynb`](notebooks/04_evaluation.ipynb) | ✅ done |
 
 ## Setup
 
