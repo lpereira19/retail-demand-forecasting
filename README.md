@@ -1,47 +1,75 @@
-# End-to-End Demand Forecasting
+# Retail Demand Forecasting — End to End
 
-End-to-end data science project for retail demand forecasting: from raw sales data to engineered features, trained models and evaluated forecasts.
+![Python](https://img.shields.io/badge/python-3.14-blue)
+![LightGBM](https://img.shields.io/badge/model-LightGBM-green)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
+
+Forecasting daily demand for **500 retail time series** (10 stores × 50 items, 5 years of sales) — from raw data to a backtested model that predicts **a full quarter ahead**.
+
+## Results
+
+A LightGBM model with horizon-safe features, backtested on every quarter of 2017 at a **91-day forecast horizon** (the model sees no sales data from the 3 months before each prediction):
+
+| Model | Mean SMAPE (4 folds) | vs. baseline |
+|---|---|---|
+| Seasonal naive (same weekday, last year) | 17.15 | — |
+| **LightGBM** | **12.07** | **~30% better, in every fold** |
+
+For reference, top solutions of the original [Kaggle challenge](https://www.kaggle.com/c/demand-forecasting-kernels-only) score ~12.5 SMAPE on its 3-month test window.
+
+![Q4 2017 actual vs quarter-ahead forecast](outputs/figures/eval_02_q4_forecast.png)
+
+*Total daily demand in Q4 2017 vs. the forecast made 91 days in advance — the weekly sawtooth and the December dip are reconstructed entirely from calendar features and year-old history.*
+
+## Highlights
+
+- **Baseline first** — every model must beat a zero-parameter seasonal naive forecast before earning its complexity.
+- **Leakage-safe by construction** — time-based train/validation splits; every lag and rolling feature uses only data strictly before the target date.
+- **Horizon-aware evaluation** — beyond the usual 1-day-ahead scoring, a rolling-origin backtest reproduces the real deployment constraint: forecasting a quarter ahead with quarter-old data.
+- **Narrated notebooks** — each notebook states its question, shows the evidence, and ends with findings that feed the next step.
+- **Honest reporting** — caveats and scope notes included (e.g., why 91-day scores stay close to 1-day scores on this dataset).
+
+## Pipeline
+
+| Step | Notebook | What it does |
+|---|---|---|
+| 1 | [`01_eda.ipynb`](notebooks/01_eda.ipynb) | Trend, yearly/weekly seasonality, store/item heterogeneity, series-level noise |
+| 2 | [`02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb) | 21 calendar, lag and rolling-window features per series → parquet |
+| 3 | [`03_modeling.ipynb`](notebooks/03_modeling.ipynb) | Seasonal naive vs. LightGBM, time-based validation (SMAPE 18.6 → 12.4) |
+| 4 | [`04_evaluation.ipynb`](notebooks/04_evaluation.ipynb) | 91-day-horizon backtest across all 2017 quarters |
+
+![Average daily sales by month and year](outputs/figures/eda_02_month_year_heatmap.png)
 
 ## Dataset
 
-[Store Item Demand Forecasting Challenge](https://www.kaggle.com/c/demand-forecasting-kernels-only/data) (Kaggle):
-**913,000 rows** of daily sales — 10 stores × 50 items × 5 years (2013–2017).
-
-The data is not versioned in this repo. To reproduce, download `train.csv` from Kaggle and place it at `data/raw/train.csv`.
+[Store Item Demand Forecasting Challenge](https://www.kaggle.com/c/demand-forecasting-kernels-only/data) (Kaggle): 913,000 rows of daily sales — 10 stores × 50 items × 2013–2017. The data is not versioned here; download `train.csv` from Kaggle into `data/raw/`.
 
 ## Project structure
 
 ```
-├── data/
-│   ├── raw/          # original Kaggle data (not versioned)
-│   ├── processed/    # feature-engineered datasets (not versioned)
-│   └── external/     # auxiliary data sources
-├── notebooks/        # numbered analysis notebooks
-├── src/
-│   ├── data/         # data loading utilities
-│   ├── features/     # feature engineering pipeline
-│   ├── models/       # model training
-│   └── evaluation/   # metrics and backtesting
+├── data/              # raw & processed data (not versioned)
+├── notebooks/         # numbered analysis notebooks (the pipeline)
+├── src/               # reusable modules (in progress — see roadmap)
 ├── outputs/
-│   ├── figures/      # exported charts
-│   ├── forecasts/    # model predictions
-│   └── metrics/      # evaluation results
+│   ├── figures/       # exported charts
+│   ├── forecasts/     # model predictions (not versioned)
+│   └── metrics/       # evaluation results (not versioned)
 └── requirements.txt
 ```
 
-## Pipeline
-
-| Step | Notebook | Status |
-|---|---|---|
-| 1. Exploratory data analysis | [`notebooks/01_eda.ipynb`](notebooks/01_eda.ipynb) | ✅ done |
-| 2. Feature engineering | [`notebooks/02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb) | ✅ done |
-| 3. Baseline & ML models | [`notebooks/03_modeling.ipynb`](notebooks/03_modeling.ipynb) | ✅ done |
-| 4. Evaluation & backtesting | [`notebooks/04_evaluation.ipynb`](notebooks/04_evaluation.ipynb) | ✅ done |
-
-## Setup
+## Reproduce
 
 ```bash
 pip install -r requirements.txt
+# place Kaggle train.csv in data/raw/, then run notebooks 01 → 04
 ```
 
-Then place the Kaggle `train.csv` in `data/raw/` and run the notebooks in order.
+## Roadmap
+
+- [ ] Extract feature/metric/training logic into `src/` modules with unit tests and CI
+- [ ] Inventory optimization: quantile forecasts → safety stock & service-level simulation
+- [ ] Holiday calendar features
+
+## License
+
+[MIT](LICENSE)
