@@ -1,6 +1,6 @@
 # Retail Demand Forecasting — End to End
 
-![CI](https://github.com/lpereira19/end-to-end-demand-dpm/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/lpereira19/retail-demand-forecasting/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.14-blue)
 ![LightGBM](https://img.shields.io/badge/model-LightGBM-green)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
