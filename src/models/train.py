@@ -15,14 +15,16 @@ DEFAULT_PARAMS = {
 }
 
 
-def train_lgbm(train_x, train_y, eval_x, eval_y, params=None, early_stopping_rounds=100):
+def train_lgbm(
+    train_x, train_y, eval_x, eval_y, params=None, eval_metric="l1", early_stopping_rounds=100
+):
     """Fit a LightGBM regressor with early stopping on the eval set."""
     model = lgb.LGBMRegressor(**{**DEFAULT_PARAMS, **(params or {})})
     model.fit(
         train_x,
         train_y,
         eval_set=[(eval_x, eval_y)],
-        eval_metric="l1",
+        eval_metric=eval_metric,
         callbacks=[
             lgb.early_stopping(early_stopping_rounds, verbose=False),
             lgb.log_evaluation(0),

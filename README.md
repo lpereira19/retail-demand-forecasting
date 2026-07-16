@@ -24,6 +24,7 @@ For reference, top solutions of the original [Kaggle challenge](https://www.kagg
 
 ## Highlights
 
+- **Forecasts that pay for themselves** — quantile forecasts feed a newsvendor ordering policy that cuts simulated Q4 inventory cost by **75%** ($516k → $129k) versus the naive policy.
 - **Baseline first** — every model must beat a zero-parameter seasonal naive forecast before earning its complexity.
 - **Leakage-safe by construction** — time-based train/validation splits; every lag and rolling feature uses only data strictly before the target date.
 - **Horizon-aware evaluation** — beyond the usual 1-day-ahead scoring, a rolling-origin backtest reproduces the real deployment constraint: forecasting a quarter ahead with quarter-old data.
@@ -39,6 +40,7 @@ For reference, top solutions of the original [Kaggle challenge](https://www.kagg
 | 2 | [`02_feature_engineering.ipynb`](notebooks/02_feature_engineering.ipynb) | 21 calendar, lag and rolling-window features per series → parquet |
 | 3 | [`03_modeling.ipynb`](notebooks/03_modeling.ipynb) | Seasonal naive vs. LightGBM, time-based validation (SMAPE 18.6 → 12.4) |
 | 4 | [`04_evaluation.ipynb`](notebooks/04_evaluation.ipynb) | 91-day-horizon backtest across all 2017 quarters |
+| 5 | [`05_inventory_optimization.ipynb`](notebooks/05_inventory_optimization.ipynb) | Quantile forecasts → newsvendor ordering policy: **75% lower inventory cost** vs naive |
 
 ![Average daily sales by month and year](outputs/figures/eda_02_month_year_heatmap.png)
 
@@ -74,8 +76,9 @@ pip install -r requirements.txt
 ## Roadmap
 
 - [x] Extract feature/metric/training logic into `src/` modules with unit tests and CI
-- [ ] Inventory optimization: quantile forecasts → safety stock & service-level simulation
+- [x] Inventory optimization: quantile forecasts → safety stock & service-level simulation
 - [ ] Holiday calendar features
+- [ ] Inventory carryover and order batching in the simulation
 
 ## License
 
