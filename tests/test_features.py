@@ -52,7 +52,7 @@ def test_no_leakage_from_future_sales():
     mutated = raw.copy()
     mutated.loc[mutated["date"] >= cutoff, "sales"] = 99999
 
-    kwargs = dict(lags=(28, 35), windows=(7,), horizon=horizon, dropna=False)
+    kwargs = {"lags": (28, 35), "windows": (7,), "horizon": horizon, "dropna": False}
     original = build_features(raw, **kwargs)
     changed = build_features(mutated, **kwargs)
 
