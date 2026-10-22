@@ -70,7 +70,7 @@ For reference, top solutions of the original [Kaggle challenge](https://www.kagg
 
 ```bash
 pip install -r requirements.txt
-# place Kaggle train.csv in data/raw/, then run notebooks 01 → 04
+# place Kaggle train.csv in data/raw/, then run notebooks 01 → 05
 ```
 
 ## Roadmap
